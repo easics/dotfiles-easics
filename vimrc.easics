@@ -28,7 +28,7 @@ nnoremap <F6> :cprevious
 " In a long file: force syntax highlighting when in middle of file
 nmap <S-F5> syntax sync fromstart
 " Alternate file
-nnoremap <F8> :A
+nnoremap <F8> :AF
 " Create ifndef for header files
 nnoremap <F10> :call CreateHeaderIfndef()
 " Make class definition

@@ -39,3 +39,6 @@ Plug 'git@gitlab.loebas.easics.be:dotfiles/bundles/etna.git'
 Plug 'git@gitlab.loebas.easics.be:dotfiles/bundles/gentree.git'
 Plug 'git@gitlab.loebas.easics.be:dotfiles/bundles/vci.git'
 
+" Common plugins (adapted for easics)
+Plug 'git@gitlab.loebas.easics.be:dotfiles/bundles/filenavigation.git'
+
