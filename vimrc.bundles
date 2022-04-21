@@ -1,0 +1,60 @@
+if &compatible
+  set nocompatible
+end
+
+" Remove declared plugins
+function! s:UnPlug(plug_name)
+  if has_key(g:plugs, a:plug_name)
+    call remove(g:plugs, a:plug_name)
+  endif
+endfunction
+command!  -nargs=1 UnPlug call s:UnPlug(<args>)
+
+
+call plug#begin('~/.vim/bundle')
+
+" Define bundles via Github repos
+Plug 'christoomey/vim-run-interactive'
+
+" If fzf has already been installed via Homebrew, use the existing fzf
+" Otherwise, install fzf. The `--all` flag makes fzf accessible outside of vim
+if isdirectory("/usr/local/opt/fzf")
+  Plug '/usr/local/opt/fzf'
+else
+  Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+endif
+
+Plug 'junegunn/fzf.vim'   " Fuzzy Finder
+Plug 'pangloss/vim-javascript'   " better syntax highlighting and indentation
+Plug 'pbrisbin/vim-mkdir'   " auto create non-exisiting dirs
+Plug 'tpope/vim-bundler'   " Vim goodies for Bundler
+"Plug 'tpope/vim-endwise'   " Auto add closing keyword
+Plug 'tpope/vim-eunuch'   " Sugar for UNIX shell commands
+Plug 'tpope/vim-fugitive'   " Git
+Plug 'tpope/vim-rails'   " Ruby on rails
+"Plug 'tpope/vim-rake'   " Rake support
+Plug 'tpope/vim-repeat'   " Better working . after a plugin command
+"Plug 'tpope/vim-rhubarb'   " Github integration
+Plug 'tpope/vim-surround'   " Surround text with stuff
+Plug 'vim-ruby/vim-ruby'   " Better ruby support
+Plug 'vim-scripts/tComment'   " Comments in code
+
+
+" Easics plugins
+Plug 'git@gitlab.loebas.easics.be:dotfiles/bundles/ariadne.git'
+Plug 'git@gitlab.loebas.easics.be:dotfiles/bundles/etna.git'
+Plug 'git@gitlab.loebas.easics.be:dotfiles/bundles/gentree.git'
+Plug 'git@gitlab.loebas.easics.be:dotfiles/bundles/vci.git'
+
+" Common plugins (adapted for easics)
+Plug 'git@gitlab.loebas.easics.be:dotfiles/bundles/filenavigation.git'
+Plug 'git@gitlab.loebas.easics.be:dotfiles/bundles/visincr.git'
+
+
+" Local bundles
+if filereadable(expand("~/.vimrc.bundles.local"))
+  source ~/.vimrc.bundles.local
+endif
+
+call plug#end()
+

@@ -1,0 +1,45 @@
+[init]
+  defaultBranch = master
+
+[status]
+  color = auto
+  relativePaths = true
+
+[diff]
+  color = auto
+
+[alias]
+  st = status
+  co = checkout
+  ci = commit
+  cob = count-objects -v
+  stu = status -uno
+  ls = ls-files
+  br = branch
+  tree = log --graph --decorate --pretty=oneline --abbrev-commit --color=auto
+  ; Modified Not Generated
+  mng = !git ls -m | xargs grep -L 'EASICS generated file'
+  logs = log --stat
+  logss = log --stat --since=1.week
+  unstage = reset HEAD --
+  last = log --stat -1 HEAD
+  sw = switch
+
+[push]
+  default = simple
+
+[merge]
+  conflictstyle = diff3
+  tool = gvimdiff
+  ff = true
+
+[merge "reggieDbMerge"]
+  name = reggie db merge
+  driver = $REGGIE_HOME/ruby/mergeReggieDb.rb %O %A %B %L %P
+
+[gui]
+  fontui = -family Arial -size 14 -weight normal -slant roman -underline 0 -overstrike 0
+  fontdiff = -family \"Courier New\" -size 14 -weight normal -slant roman -underline 0 -overstrike 0
+
+[cola]
+  spellcheck = false
