@@ -43,3 +43,6 @@
 
 [cola]
   spellcheck = false
+
+[include]
+  path = ~/.gitconfig.local
