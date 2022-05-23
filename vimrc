@@ -34,6 +34,8 @@ nnoremap <F5> :cnext
 nnoremap <F6> :cprevious
 " In a long file: force syntax highlighting when in middle of file
 nmap <S-F5> syntax sync fromstart
+autocmd FileType cpp nmap <F7> :call AddMagic()
+autocmd FileType ari nmap <F7> :call AddMagicAri()
 " Alternate file
 nnoremap <F8> :AF
 " Create ifndef for header files
