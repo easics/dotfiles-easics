@@ -1,0 +1,151 @@
+
+# For setups
+export PATH="/home/toels/easics/noversion/bin:$PATH"
+
+alias setup='source ~toels/easics/setup_bash/setup_script.bashrc'
+alias msetup='setup modelsim'
+alias ssetup='setup synopsys'
+
+# Common
+alias which='type -p'
+alias where='type -a'
+alias lr='ls -ltra'
+alias l='ls -l'
+alias hi=history
+
+alias rm='rm -i'
+alias ls='ls --color=auto -h'
+
+alias vi=vim
+
+alias more=less
+
+# Grep for specific filetypes
+alias grep='grep --color'
+alias vgrep=$'fdfind \'.*\.(vhd|v|vhdl)$\' -0 | xargs -0 ag --silent '
+alias cgrep=$'fdfind \'.*\.(C|cpp|cc)$\' -0 | xargs -0 ag --silent '
+alias hgrep=$'fdfind \'.*\.(h|hpp|tpp)$\' -0 | xargs -0 ag --silent '
+alias fgrep='find . -type f -readable -print0 | xargs -0 grep'
+alias svgrep=$'fdfind \'.*\.(sv|svh)$\' -0 | xargs -0 ag --silent '
+alias rbgrep=$'fdfind \' .*\.(rb)$\' -0 | xargs -0 ag --silent '
+alias pygrep=$'fdfind \' .*\.(py)$\' -0 | xargs -0 ag --silent '
+alias vcigrep=$'fdfind \' .*\.(vci)$\' -0 | xargs -0 ag --silent '
+alias arigrep=$'fdfind \' .*\.(ari)$\' -0 | xargs -0 ag --silent '
+alias etnagrep=$'fdfind \' .*\.(etna)$\' -0 | xargs -0 ag --silent '
+
+# Change dir shortcuts with design work dir / git dir
+alias cdroot='cd $DESIGN_ROOT_DIR'
+alias cdwork='cd $DESIGN_WORK_DIR' 
+alias cw='cd $DESIGN_WORK_DIR'
+alias pw='pushd $DESIGN_WORK_DIR'
+alias cg='cd $(git rev-parse --show-toplevel)'
+alias pg='pushd $(git rev-parse --show-toplevel)'
+alias setw='export DESIGN_WORK_DIR=$PWD'
+
+# Empty LD_LIBRARY_PATH (to avoid issue when setup vivado was done)
+alias o='LD_LIBRARY_PATH= okular'
+alias inkscape='LD_LIBRARY_PATH= finkscape'
+alias ink='LD_LIBRARY_PATH= finkscape'
+alias inkview='LD_LIBRARY_PATH= inkview'
+alias libreoffice='LD_LIBRARY_PATH= libreoffice'
+alias gitg='LD_LIBRARY_PATH= gitg'
+alias qgit='LD_LIBRARY_PATH= qgit'
+alias nolib='LD_LIBRARY_PATH= ITCL_LIBRARY= PATH=/usr/bin:/bin:$PATH '
+
+alias nvim=~/nvim.appimage
+
+md() {
+  mkdir $1
+  cd $1
+}
+
+# Print in terminal from selection
+alias psel='pwd | xsel -i'
+alias csel='cd $(xsel -o)'
+
+export LS_COLORS="no=00:fi=00:di=00;36:ln=04;33:pi=40;33:so=01;35:bd=40;33;01:cd=40;33;01:or=04;35:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arj=01;31:*.taz=01;31:*.lzh=01;31:*.zip=01;31:*.z=01;31:*.Z=01;31:*.gz=01;31:*.deb=01;31:*.jpg=01;35:*.gif=01;35:*.bmp=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.mpg=01;37:*.avi=01;37:*.gl=01;37:*.dl=01;37:*.rpm=01;31:*.vhd=31:*.vhdl=31:*.dsc=35:*.tex=32:*.ari=35"
+
+export EDITOR=vim
+export HISTSIZE=50000
+export HISTCONTROL=erasedups
+export XFONT='-lfp-bright-medium-r-normal--9-90-75-75--60-iso8859-1'
+export XFONT='-schumacher-clean-medium-r-normal--14-140-75-75-c-80-iso646.1991-irv'
+smiley() {
+  retval=$?
+  if [ "$retval" = "0" ]; then
+    echo ":)"
+  else
+    echo ":( ($retval)"
+  fi
+}
+# set xterm title
+case ${TERM} in
+  [aEkx]term*|rxvt*|gnome*|konsole*|interix|tmux*)
+    PS1='\[\033]0;\u@\h:\w\007\]'
+    ;;
+  screen*)
+    PS1='\[\033k\u@\h:\w\033\\\]'
+    ;;
+  *)
+    unset PS1
+    ;;
+esac
+Green="\033[0;32m"
+Blue="\033[1;34m"
+Normal="\033[0m"
+export PS1="\[$Blue\]\u@\h \[$Green\]\W \$(smiley) \[$Normal\]> "
+export OS_TYPE=`uname -s`
+export MACHINE_TYPE=`uname -m`
+export PATH="$HOME/bin:$PATH"
+type -p PathEditor 2>&1 > /dev/null && export PATH=`PathEditor -clean PATH`
+export PRINTER=grijs
+
+# 2x ctrl D to exit
+export IGNOREEOF=1
+
+export ARIADNE_QUIET_COPYRIGHT=1
+
+export MINICOM="-c on"
+
+# Programmable completion tuning
+complete -A command where which
+
+# Helps with environment vars when doing cd etc.
+shopt -s cdable_vars
+shopt -s lithist
+shopt -s cdspell
+shopt -s dirspell
+shopt -s direxpand
+
+# Damn escaping of $ on tab completion
+vers=${BASH_VERSION%(*}
+major=${vers:0:1}
+minor=${vers:2:1}
+micro=${vers:4}
+if [[ $major -eq 4 && $minor -eq 2 && $micro -gt 52 ]]; then
+  shopt -s direxpand
+fi
+
+# Charset of terminal
+export LANG=en_US.UTF-8
+export LC_CTYPE=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
+
+# For Xilinx 13.3 13.4
+unset QT_PLUGIN_PATH
+
+# For fuzzy find
+export FZF_COMPLETION_TRIGGER="--"
+
+if [ -x ~/.local/bin ]; then
+  export PATH=~/.local/bin:$PATH
+fi
+
+export GPG_TTY="$(tty)"
+export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
+gpgconf --launch gpg-agent
+
+NPM_PACKAGES="$HOME/.npm-packages"
+PATH="$NPM_PACKAGES/bin:$PATH"
+MANPATH="$NPM_PACKAGES/share/man:$(manpath)"
+NODE_PATH="$NPM_PACKAGES/lib/node_modules:$NODE_PATH"
