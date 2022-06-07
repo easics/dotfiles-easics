@@ -1,0 +1,35 @@
+# Setup fzf
+# ---------
+if [[ ! "$PATH" == */home/$USER/.fzf/bin* ]]; then
+  export PATH="${PATH:+${PATH}:}/home/$USER/.fzf/bin"
+fi
+
+# Auto-completion
+# ---------------
+# Auto-completion
+# ---------------
+_fzf_compgen_path() {
+  dir=$(git root 2> /dev/null || echo "$1")
+  if [ -z "$dir" ]; then
+    dir="."
+  fi
+  command find -L "$dir" \
+    -name .git -prune -o -name .hg -prune -o -name .svn -prune -o -name lib -prune -o \( -type d -o -type f -o -type l \) \
+    -a -not -path "$dir" -print 2> /dev/null | sed 's@^\./@@'
+}
+
+_fzf_compgen_dir() {
+  dir=$(git rev-parse --show-cdup 2> /dev/null || echo "$1")
+  if [ -z "$dir" ]; then
+    dir="."
+  fi
+  command find -L "$dir" \
+    -name .git -prune -o -name .hg -prune -o -name .svn -prune -o -name lib -prune -o -type d \
+    -a -not -path "$dir" -print 2> /dev/null | sed 's@^\./@@'
+}
+
+[[ $- == *i* ]] && source "/home/steven/.fzf/shell/completion.bash" 2> /dev/null
+
+# Key bindings
+# ------------
+source "/home/steven/.fzf/shell/key-bindings.bash"
