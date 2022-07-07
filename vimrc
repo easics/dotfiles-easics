@@ -205,10 +205,10 @@ inoremap <Tab> <C-r>=InsertTabWrapper()<CR>
 inoremap <S-Tab> <C-n>
 
 " Get off my lawn
-nnoremap <Left> :echoe "Use h"<CR>
-nnoremap <Right> :echoe "Use l"<CR>
-nnoremap <Up> :echoe "Use k"<CR>
-nnoremap <Down> :echoe "Use j"<CR>
+"nnoremap <Left> :echoe "Use h"<CR>
+"nnoremap <Right> :echoe "Use l"<CR>
+"nnoremap <Up> :echoe "Use k"<CR>
+"nnoremap <Down> :echoe "Use j"<CR>
 
 " Run commands that require an interactive shell
 nnoremap <Leader>r :RunInInteractiveShell<Space>
