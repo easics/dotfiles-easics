@@ -41,18 +41,18 @@ Plug 'vim-scripts/tComment'   " Comments in code
 
 
 " Easics tools plugins
-Plug 'git@github.com:easics/ariadne.git'
-Plug 'git@github.com:easics/etna.git'
-Plug 'git@github.com:easics/gentree.git'
-Plug 'git@github.com:easics/vci.git'
+Plug 'easics/ariadne'
+Plug 'easics/etna'
+Plug 'easics/gentree'
+Plug 'easics/vci'
 
 " Easics plugins
-Plug 'git@github.com:easics/class_templates.git'
-Plug 'git@github.com:easics/addmagic.git'
+Plug 'easics/class_templates'
+Plug 'easics/addmagic'
 
 " Common plugins (adapted for easics)
-Plug 'git@github.com:easics/filenavigation.git'
-Plug 'git@github.com:easics/visincr.git'
+Plug 'easics/filenavigation'
+Plug 'easics/visincr'
 
 
 " Local bundles
