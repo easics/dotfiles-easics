@@ -166,3 +166,5 @@ NODE_PATH="$NPM_PACKAGES/lib/node_modules:$NODE_PATH"
 if [ -f ~/.bashrc.local ]; then
   source ~/.bashrc.local
 fi
+
+umask 0007
