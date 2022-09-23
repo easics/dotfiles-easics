@@ -12,7 +12,7 @@ alias rd "radix d"
 alias rb "radix b"
 alias ru "radix u"
 alias daw "do allwaves.do"
-alias ala "add log -r *"
+alias ala "add log -r /*"
 
 # run -c for n times
 proc rc {n} {
