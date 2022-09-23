@@ -1,0 +1,4 @@
+#! /bin/sh -e
+# screenshot to clipboard
+
+import png:- | xclip -selection clipboard -t image/png

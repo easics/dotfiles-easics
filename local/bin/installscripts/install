@@ -1,0 +1,152 @@
+#!/bin/sh
+
+usage() {
+  echo
+  echo "SYNOPSIS: $0 path [clean | link | strip]"
+  echo "          where path indicates where to install."
+  echo "          If the second argument is specified and equal to clean,"
+  echo "          the installation directory will be cleaned up first."
+  echo "          If the second argument is link, links will be created iso"
+  echo "          copying files."
+  echo "          If the second argument is strip, installed executables"
+  echo "          will be stripped"
+  echo
+  exit 0
+}
+
+is_newer() {
+  if [ 0$# != 02 ]; then
+    echo "Usage: is_newer file1 file2"
+    echo "       return 0 when file1 is newer than file2"
+    echo "       return 1 otherwise"
+    echo "       both files must exist"
+    return 1;
+  fi
+  oldest=`ls -1dt $1 $2 | sed '1q'`
+  if [ " $oldest" = " $1" ]; then
+    $ECHO '0\c'
+    return 0
+  fi
+  $ECHO '1\c'
+  return 0
+}
+
+copy_if_newer() {
+  if [ 0$# != 02 -a 0$# != 03 ]; then
+    echo "Usage: copy_if_newer source destination [strip | link]"
+    echo "       if the third argument is strip, destination will be stripped."
+    echo "       You can only specify a file for destination, not a person"
+    echo "       if the third argument is link, a link will be created iso"
+    echo "       copying the file"
+    return 1;
+  fi
+  if [ ! -f $1 ]; then
+    echo "$1 does not exist"
+    return 1;
+  fi
+
+  strip="no"
+  _link="no"
+  if [ " $3" = " strip" ]; then
+    strip="yes"
+  elif [ " $3" = " link" ]; then
+    _link="yes"
+  fi
+
+  if [ " $_link" = " yes" ]; then
+    rm -f $2
+    ln -s $source_dir/$1 $2
+  else
+    if [ -f $2 ]; then
+      result=`is_newer $1 $2`
+      if [ " $result" = " 0" ]; then
+        mv $2 $2.moved_by_install
+        cp $1 $2
+        rm -f $2.moved_by_install
+        if [ " $strip" = " yes" ]; then
+          [ -x $2 ] && strip $2
+        fi
+      fi
+    else
+      cp $1 $2
+      if [ " $strip" = " yes" ]; then
+        [ -x $2 ] && strip $2
+      fi
+    fi
+  fi
+}
+
+echo "Welcome to the installation script!"
+
+if [ 0$# -ne 01 -a 0$# -ne 02 ] ; then
+  usage
+fi
+
+if [ " $1" = " -h" ] ; then
+  usage
+fi
+
+umask 7
+
+UNAME=`uname`
+if [ "$UNAME" = "SunOS" ]; then
+    ECHO=/usr/bin/echo
+else
+    ECHO="/bin/echo -e"
+fi
+
+source_dir=$PWD
+
+if [ ! -d $1 ] ; then
+  echo
+  echo "Target directory does not exist, creating it"
+  mkdir -p $1 || { echo "Failed to create directory $1"; exit 1; }
+fi
+
+if [ " $2" = " clean" ]; then
+  echo "About to execute rm -fr $1/*"
+  $ECHO "is this OK [y/n] ? \c"
+  read answer
+  if [ "$answer" = "y" ]; then
+    rm -fr $1/*
+  else
+    echo "Aborted"
+    exit 1
+  fi
+fi
+
+if [ " $2" = " link" ]; then
+  strip_link="link"
+  link="link"
+elif [ " $2" = " strip" ]; then
+  strip_link="strip"
+  link=""
+else
+  strip_link=""
+  link=""
+fi
+
+source ./install.config
+
+echo "Installing in $1"
+echo "--------------------------"
+echo ""
+$ECHO "Creating directory hierarchy ... \c"
+
+for i in $directories; do
+  mkdir -p $1/$i || exit
+  $ECHO ".\c"
+done
+
+echo " done"
+
+$ECHO "Copying files... \c"
+for dir in $directories; do
+  var_name=`echo $dir | tr /.- ___`
+  var_name="${var_name}_files"
+  for file in ${!var_name}; do
+    copy_if_newer $file $1/$dir/`basename $file` $strip_link || exit
+  done
+done
+
+echo "done"

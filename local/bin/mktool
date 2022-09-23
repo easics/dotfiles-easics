@@ -1,0 +1,284 @@
+#! /bin/sh -e
+
+args=`getopt -o hl: -n "mktool" -- "$@"`
+if [ $? != 0 ]; then
+  echo "Terminating ..." >&2;
+  exit 1
+fi
+
+eval set -- "$args"
+
+language="c"
+while true; do
+  case "$1" in
+    -h)
+      cat <<EOF
+mktool [-h] <src dir> <dest dir>
+        -h Show this help message
+        -l Language (c for C++ (default), r for ruby)
+EOF
+      exit 0
+      ;;
+    -l)
+      language=$2
+      shift
+      shift
+      ;;
+    --)
+      shift
+      break;
+      ;;
+    *) echo "Unknown option, use -h for help"; echo $1; exit 1
+  esac
+done
+
+if [ $# != 1 ]; then
+  echo "Incorrect number of arguments"
+  exit 1
+fi
+
+name=$1
+
+cd ~/src/git/easics/tools/
+mkdir $name
+cd $name
+
+cat << EOF >> project.bashrc
+export DESIGN_WORK_DIR=\`pwd\`
+
+EOF
+
+cat << EOF >> Makefile
+#-------------------------------------------------------------------------------
+#
+# Copyright(c) 2002 by Easics NV. All rights reserved.
+#
+# This source file is proprietary and confidential information
+# of Easics NV and may be used and disclosed only as authorized
+# in a consulting and/or subcontracting agreement where the
+# source code is part of the statement of work specified in
+# the agreement, or if Easics NV has given its written consent
+# to such use or disclosure.
+# This source file remains the sole property of Easics NV.
+#
+#-------------------------------------------------------------------------------
+
+# Modify only this
+SUBDIRS=src doc
+
+.SILENT:
+
+include Config
+
+all: subdirs
+
+subdirs: \$(SUBDIRS)
+
+.PHONY: subdirs \$(SUBDIRS)
+
+\$(SUBDIRS):
+	\$(MAKE) -C \$@ \$(MAKECMDGOALS)
+
+clean: subdirs
+	rm -f Config .config
+
+install: install_$name install_doc
+
+install_$name:
+	\$(MAKE)
+	./install \$(PREFIX)
+
+install_doc:
+	\$(MAKE) -C doc
+	cp doc/$name.html ~vhdl/manuals/$name.html
+
+install-link:
+	./install \$(PREFIX) link
+
+.PHONY: clean install install-link
+
+EOF
+
+if [ $language="c" ]; then
+cat << EOF >> Changes
+R"(
+
+1.0.0
+=====
+First version
+
+)"
+EOF
+fi
+
+cat << EOF >> Config
+PREFIX=/usr/local/x86_64/EasicsTools/$name/1.0.0
+EOF
+
+cat << EOF >> Config.in
+PREFIX=@prefix@
+EOF
+
+cp ~/.local/bin/installscripts/configure .
+cp ~/.local/bin/installscripts/install .
+
+cat << EOF >> install.config
+# Fill in all the directories in the install location you want to create
+directories="
+bin
+man/man1
+doc"
+
+# Fill in all the files you want to copy
+# Variable name should be 'dirname_underscores'_files
+# where dirname_underscores is the name of the directory to copy the file to,
+# with slashes replaced with underscores.  Remove the single quotes of course.
+
+bin_files="
+src/$name
+"
+
+man_man1_files="
+doc/$name.1
+"
+
+doc_files="
+doc/$name.html
+Changes
+"
+EOF
+
+cat << EOF >> .config
+prefix=/usr/local/x86_64/EasicsTools/$name/1.0.0
+EOF
+
+cat << EOF >> .config.default
+
+# default values for options (if the user does not specify them)
+prefix=/usr
+EOF
+
+cp ~/.local/bin/installscripts/.configure_options .
+
+mkdir src
+cd src
+
+ln -s ../Changes
+
+if [ $language="c" ]; then
+  cat << EOF >> cma.ini
+extra_compile_flags = -std=c++2a
+EOF
+
+  cat << EOF >> $name.C
+#include "${name^}VersionString.h"
+
+#include <iostream>
+#include <unistd.h>
+
+namespace   // anonymous
+{
+  void usage()
+    {
+      std::cout <<
+        "$name [options] <file>\\n"
+        "  -h : show this help\\n"
+        "  -C : print changelog\\n"
+        "  -v : show version number\\n";
+    }
+}
+
+int main(int argc, char * argv[])
+{
+  try
+    {
+      int opt_result;
+      while ((opt_result = getopt(argc, argv, "hvC")) > 0)
+        {
+          switch (opt_result)
+            {
+            case '?':
+              return EXIT_FAILURE;
+              break;
+            case 'h':
+              usage();
+              return EXIT_SUCCESS;
+            case 'C':
+              std::cout <<
+#include "Changes"
+                          ;
+              return EXIT_SUCCESS;
+            case 'v':
+              std::cout <<
+                "$name version " << ${name}VersionString << "\\n";
+              return EXIT_SUCCESS;
+            default:
+              std::cerr << "confusus sum\\n";
+            }
+        }
+
+      bool errors = false;
+      if (optind == argc)
+        {
+          std::cerr << "No $name file given\\n";
+          errors = true;
+        }
+      else if (optind + 1 != argc)
+        {
+          std::cerr << "Too many files given\\n";
+          errors = true;
+        }
+      if (errors)
+        return EXIT_FAILURE;
+    }
+  catch (std::exception & e)
+    {
+      std::cerr << e.what() << "\\n";
+      return EXIT_FAILURE;
+    }
+
+  return EXIT_SUCCESS;
+}
+EOF
+
+cat << EOF >> ${name^}VersionString.h
+#ifndef ${name^}VersionString_h_
+#define ${name^}VersionString_h_
+
+static char const * const ${name}VersionString = "1.0.0";
+
+#endif
+EOF
+fi
+
+cd ..
+
+mkdir doc
+cd doc
+
+cat << EOF >> ${name}.adoc
+= ${name^} user manual(1)
+$(getent passwd ${USER} | cut -d: -f5) <${USER}@easics.be>
+
+== NAME
+$name - description to add
+
+== ${name^} approach
+EOF
+
+cat << EOF >> Makefile
+all: ${name}.1 ${name}.html
+
+%.html : %.adoc
+        asciidoctor $<
+
+%.1 : %.adoc
+        a2x -d manpage -f manpage $<
+
+clean:
+        rm -f ${name}.1 ${name}.html
+EOF
+
+cd ..
+
+

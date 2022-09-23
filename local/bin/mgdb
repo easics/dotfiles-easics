@@ -1,0 +1,10 @@
+#! /bin/sh -e
+
+pids=$(pgrep vsimk)
+for pid in $pids; do
+  dir=$(readlink /proc/$pid/cwd || true)
+  if [ "$dir" == "$PWD" ]; then
+    echo $pid
+    ${DESKTOP_SESSION}-terminal --geometry $(tput cols)x$(tput lines)+40+30 -- cgdb vsimk $pid &
+  fi
+done

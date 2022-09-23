@@ -1,0 +1,60 @@
+#! /bin/sh -e
+
+if [ ! -r libtestplan.so ]; then
+  echo "Please run this from a test directory"
+  exit 1
+fi
+echo "Found libtestplan.so"
+
+if [ -z "$SYSTEMC_HOME" ]; then
+  echo "You didn't setup systemc, can check the version"
+  exit 1
+fi
+ideal_gcc=$(echo $SYSTEMC_HOME | sed -e "s/.*gcc_\(.*\)-.*/\\1/")
+
+gcc=$(which gcc)
+if [ "$gcc" == "/usr/bin/gcc" ]; then
+  echo "You are using gcc from /usr/bin"
+  echo "You should run 'setup gcc' to select gcc $ideal_gcc"
+  exit 1
+fi
+if [ "$gcc" != "/usr/local/x86_64/gcc/$ideal_gcc/bin/gcc" ]; then
+  echo "GCC version is not good"
+  echo "You have"
+  gcc --version
+  echo "You should have version $ideal_gcc from /usr/local/x86_64/gcc/$ideal_gcc/bin/gcc"
+  echo "setup gcc $ideal_gcc"
+  #exit 1
+else
+  echo "GCC version is OK"
+fi
+
+echo "Checking for UNIQUE symbols in libtestplan.so and it's dependencies"
+so_files=$(ldd libtestplan.so | \
+  sed 's/\(lib.*=> \)\?\([[:graph:]]\+\) (0x[[:alnum:]]\+)/\2/' |
+  grep -v linux-vdso.so.1)
+have_it=0
+for so_file in $so_files; do
+  if readelf -s $so_file | grep -q ' UNIQUE '; then
+    echo $so_file
+    have_it=1
+  fi
+done
+if [ "$have_it" == 1 ]; then
+  echo "You have UNIQUE symbols in the libraries printed above"
+  echo "UNIQUE symbols prevent restart from working correctly"
+  exit 1
+else
+  echo "Nothing wrong detected."
+  echo "If restart is not working, it could be because :"
+  echo " - You do dlopen but forgot the dlcose"
+  echo " - You have memory errors in your program (check with valgrind)"
+  echo " - You have a stack overflow in your program"
+  echo "   e.g. have large local variables in functions inside a SC_THREAD or"
+  echo "   SC_METHOD"
+  echo "   This is hard to detect.  Try increasing the stack size in the"
+  echo "   thread/method and see if it works better."
+  echo "   (call set_stack_size(64*1024*1024) just after SC_THREAD)"
+  echo " - You are using a library which doesn't behave nicely"
+  echo " - Something else"
+fi

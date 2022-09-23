@@ -1,0 +1,108 @@
+#! /bin/sh
+
+config_file=.config
+config_default_file=.config.default
+options_file=.configure_options
+
+if [ ! -r $config_default_file ]; then
+  echo "$config_default_file not found, please create it"
+  exit 1
+fi
+
+. ./$config_default_file
+if [ -r $config_file ]; then
+  . ./$config_file
+fi
+
+if [ ! -r $options_file ]; then
+  echo "$options_file not found, please create it"
+  exit 1
+fi
+
+. ./$options_file
+
+options=`getoptions`
+
+fail=0
+command_line_options=""
+while [ $# != 0 ]; do
+  if [ "$1" = "-h" ] || [ "$1" = "--help" ]; then
+    showhelp
+    exit 0
+  fi
+  known_option=0
+  for option in $options; do
+    optionlen=$((${#option}+3))
+    if [ "0${1:0:$optionlen}" = "0--$option=" ]; then
+      value=${1:$optionlen}
+      eval `echo $option`=\"$value\"
+      known_option=1
+      command_line_options="$command_line_options $option"
+      continue
+    fi
+    optionlen=$((${#option}+2))
+    if [ "0${1:0:$optionlen}" = "0--$option" ]; then
+      shift
+      eval `echo $option`=\"$1\"
+      known_option=1
+      command_line_options="$command_line_options $option"
+    fi
+  done
+  if [ $known_option = "0" ]; then
+    echo "Unknown option $1"
+    fail=1
+  fi
+  shift
+done
+
+if [ $fail = "1" ]; then
+  exit 1;
+fi
+
+for option in $options; do
+  oldvalue=${!option:-''}
+  on_command_line=0
+  for arg in $command_line_options; do
+    if [ $option = $arg ]; then
+      on_command_line=1
+      break;
+    fi
+  done
+  if [ $on_command_line = 0 ]; then
+    echo -n "$option [$oldvalue] "
+    read -e reply
+    eval `echo $option`=
+    if [ ! -z "$reply" ]; then
+      eval `echo $option`=\"$reply\"
+    else
+      eval `echo $option`=\"$oldvalue\"
+    fi
+  fi
+done
+
+extrasubst=`getextrasubst`
+options="$options $extrasubst"
+
+cat /dev/null > $config_file
+for option in $options; do
+  echo "$option=${!option}" >> $config_file
+done
+
+templates=`gettemplates`
+for template in $templates; do
+  resultfile=`dirname $template`/`basename $template .in`
+  if [ ! -r $template ]; then
+    echo "Can't read template $template"
+    continue
+  fi
+  echo -n "Creating $resultfile "
+  cat /dev/null > sed_options
+  for option in $options; do
+    echo "s:@$option@:${!option}:" >> sed_options
+  done
+  sed -f sed_options $template > $resultfile.newconfig
+  rm -f sed_options
+  diff -q $resultfile $resultfile.newconfig >& /dev/null && \
+    (echo "(unchanged)" && rm -f $resultfile.newconfig) || \
+    (echo "(modified)" && mv $resultfile.newconfig $resultfile)
+done
