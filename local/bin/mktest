@@ -1,0 +1,65 @@
+#! /bin/sh -e
+
+args=`getopt -o hfm: -n "mktest" -- "$@"`
+if [ $? != 0 ]; then
+  echo "Terminating ..." >&2;
+  exit 1
+fi
+
+eval set -- "$args"
+
+force=0
+description=""
+while true; do
+  case "$1" in
+    -h)
+      cat <<EOF
+mktest [-h] [-f] <src dir> <dest dir>
+        -h Show this help message
+        -f Overwrite existing files
+        -m Test description
+EOF
+      exit 0
+      ;;
+    -f)
+      force=1
+      shift
+      ;;
+    -m)
+      description=$2
+      shift
+      shift
+      ;;
+    --)
+      shift
+      break;
+      ;;
+    *) echo "Unknown option, use -h for help"; echo $1; exit 1
+  esac
+done
+
+if [ $# != 2 ]; then
+  echo "Incorrect number of arguments"
+  exit 1
+fi
+
+src=$1
+dst=$2
+
+if [ -d $dst ]; then
+  if [ $force = 0 ]; then
+    echo "$dst already exists, aborting"
+    exit 1
+  fi
+fi
+
+mkdir -p $dst
+cd $src
+cp -a cosim.so cma.ini *.[hC] ../$dst || true
+cd ../$dst
+replacename $src $dst *${src}*
+if [ ! -z "$description" ]; then
+  echo "$description" > testdoc.adoc
+  git add -N testdoc.adoc
+fi
+git add -N cosim.so cma.ini *.[hC]

@@ -1,0 +1,8 @@
+#! /bin/sh -e
+
+program=$1
+shift
+while [ true ]; do
+  inotifywait -e close_write $*
+  $program $* || true
+done

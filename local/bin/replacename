@@ -1,0 +1,12 @@
+#! /bin/sh
+
+what=$1
+shift
+by=$1
+shift
+
+for file in $*; do
+  sed -i -e "s:$what:$by:g" $file
+done
+
+rename.ul $what $by "$@"

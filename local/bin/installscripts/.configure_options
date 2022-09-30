@@ -1,0 +1,29 @@
+
+# Function that is called when --help is requested
+showhelp()
+{
+  local options=`getoptions`
+  echo "configure"
+  for option in $options; do
+    echo "  --$option"
+  done
+}
+
+# Options the uses can change
+getoptions()
+{
+  echo "prefix"
+}
+
+# Files which should be modified based on the user-supplied values for options
+gettemplates()
+{
+  echo Config.in
+}
+
+# Other - non user changeable - options, mostly platform dependency options,
+# versions and stuff
+getextrasubst()
+{
+  echo ""
+}
