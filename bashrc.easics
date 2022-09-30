@@ -167,4 +167,4 @@ if [ -f ~/.bashrc.local ]; then
   source ~/.bashrc.local
 fi
 
-umask 0007
+umask 0027
