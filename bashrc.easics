@@ -154,6 +154,10 @@ if [ -x ~/.gem/ruby/2.7.0/bin ]; then
   export PATH=~/.gem/ruby/2.7.0/bin:$PATH
 fi
 
+if [ -x ~/.fzf/bin ]; then
+  export PATH="/home/$USER/.fzf/bin:${PATH:+${PATH}:}"
+fi
+
 export GPG_TTY="$(tty)"
 export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
 gpgconf --launch gpg-agent
