@@ -5,6 +5,7 @@ export PATH="/home/toels/easics/noversion/bin:$PATH"
 alias setup='source ~toels/easics/setup_bash/setup_script.bashrc'
 alias msetup='setup modelsim'
 alias ssetup='setup synopsys'
+alias psetup='setup project'
 
 # Common
 alias which='type -p'
@@ -74,9 +75,11 @@ export XFONT='-schumacher-clean-medium-r-normal--14-140-75-75-c-80-iso646.1991-i
 smiley() {
   retval=$?
   if [ "$retval" = "0" ]; then
-    echo ":)"
+    #echo ":)"
+    echo "😀"
   else
-    echo ":( ($retval)"
+    #echo ":( ($retval)"
+    echo "💩 ($retval)"
   fi
 }
 # set xterm title
@@ -150,7 +153,9 @@ if [ -x ~/.npm-packages/bin ]; then
   export PATH=~/.npm-packages/bin:$PATH
 fi
 
-if [ -x ~/.gem/ruby/2.7.0/bin ]; then
+if [ -x ~/.gem/ruby/3.0.0/bin ]; then
+  export PATH=~/.gem/ruby/3.0.0/bin:$PATH
+elif [ -x ~/.gem/ruby/2.7.0/bin ]; then
   export PATH=~/.gem/ruby/2.7.0/bin:$PATH
 fi
 
@@ -158,13 +163,15 @@ if [ -x ~/.fzf/bin ]; then
   export PATH="/home/$USER/.fzf/bin:${PATH:+${PATH}:}"
 fi
 
-export GPG_TTY="$(tty)"
-export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
-gpgconf --launch gpg-agent
+if [ -z "$SSH_CLIENT" ]; then
+  export GPG_TTY="$(tty)"
+  export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
+  gpgconf --launch gpg-agent
+fi
 
 NPM_PACKAGES="$HOME/.npm-packages"
 PATH="$NPM_PACKAGES/bin:$PATH"
-MANPATH="$NPM_PACKAGES/share/man:$(manpath)"
+#MANPATH="$NPM_PACKAGES/share/man:$(manpath)"
 NODE_PATH="$NPM_PACKAGES/lib/node_modules:$NODE_PATH"
 
 if [ -f ~/.bashrc.local ]; then
