@@ -35,3 +35,6 @@ map! <s-insert> <C-O>:set paste<CR><C-R>*<C-O>:set nopaste<CR>
 nmap <S-F1> :tabp<CR>
 nmap <S-F2> :tabn<CR>
 nmap <S-F3> :tablast<CR>
+if filereadable($HOME . "/.gvimrc.local")
+  source ~/.gvimrc.local
+endif
