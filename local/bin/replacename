@@ -9,4 +9,4 @@ for file in $*; do
   sed -i -e "s:$what:$by:g" $file
 done
 
-rename.ul $what $by "$@"
+rename "s/$what/$by/" "$@"

@@ -5,6 +5,8 @@ set history save on
 set overload-resolution on
 set print object on
 set print static-members off
+set print pretty on
+set print demangle on
 #set auto-solib-add on
 set confirm off
 set pagination off
