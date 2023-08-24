@@ -41,10 +41,10 @@ Plug 'vim-scripts/tComment'   " Comments in code
 
 
 " Easics tools plugins
-Plug 'easics/ariadne'
-Plug 'easics/etna'
-Plug 'easics/gentree'
-Plug 'easics/vci'
+Plug 'easics/ariadne_plugins'
+Plug 'easics/etna_plugins'
+Plug 'easics/gentree_plugins'
+Plug 'easics/vci_plugins'
 
 " Easics plugins
 Plug 'easics/class_templates'
