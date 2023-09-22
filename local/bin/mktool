@@ -158,7 +158,7 @@ cat << EOF >> .config.default
 prefix=/usr
 EOF
 
-cp ~/.local/bin/installscripts/.configure_options .
+cp ~/.local/bin/installscripts/configure_options .configure_options
 
 mkdir src
 cd src
