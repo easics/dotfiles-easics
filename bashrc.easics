@@ -75,11 +75,9 @@ export XFONT='-schumacher-clean-medium-r-normal--14-140-75-75-c-80-iso646.1991-i
 smiley() {
   retval=$?
   if [ "$retval" = "0" ]; then
-    #echo ":)"
-    echo "😀"
+    echo ":)"
   else
-    #echo ":( ($retval)"
-    echo "💩 ($retval)"
+    echo ":( ($retval)"
   fi
 }
 # set xterm title
