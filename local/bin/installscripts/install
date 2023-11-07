@@ -86,7 +86,7 @@ if [ " $1" = " -h" ] ; then
   usage
 fi
 
-umask 7
+umask 0027
 
 UNAME=`uname`
 if [ "$UNAME" = "SunOS" ]; then
