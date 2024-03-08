@@ -31,6 +31,19 @@ document pdelta
   count in Modelsim)
 end
 
+define newstr
+  set ($arg0)=(std::string*)malloc(sizeof(std::string))
+  call ($arg0)->basic_string()
+  # 'assign' returns *this; casting return to void avoids printing of the struct.
+  call (void)( ($arg0)->assign($arg1) )
+end
+document newstr
+  Return a pointer to a new string, useful to index maps with strings as keys.
+  Example usage:
+    newstr $foo "hello world"
+    p my_map[*$foo]
+end
+
 python
 import os
 import sys
@@ -39,3 +52,6 @@ import systemc
 systemc.register_systemc()
 exec(open(os.path.expanduser('~/.gdb/python/ac_types/ac_pp.py')).read())
 end
+
+# Source local config (without showing a warning if the local file does not exist)
+pipe source ~/.gdbinit.local| > /dev/null
