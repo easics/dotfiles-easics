@@ -28,6 +28,9 @@
 [push]
   default = simple
 
+[pull]
+  rebase = false
+
 [merge]
   conflictstyle = diff3
   tool = gvimdiff
@@ -46,5 +49,3 @@
 
 [include]
   path = ~/.gitconfig.local
-[pull]
-	rebase = false
