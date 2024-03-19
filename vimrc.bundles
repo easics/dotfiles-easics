@@ -26,7 +26,7 @@ endif
 
 Plug 'junegunn/fzf.vim'   " Fuzzy Finder
 Plug 'pangloss/vim-javascript'   " better syntax highlighting and indentation
-Plug 'pbrisbin/vim-mkdir'   " auto create non-exisiting dirs
+Plug 'pbrisbin/vim-mkdir'   " auto create non-existing dirs
 Plug 'tpope/vim-bundler'   " Vim goodies for Bundler
 "Plug 'tpope/vim-endwise'   " Auto add closing keyword
 Plug 'tpope/vim-eunuch'   " Sugar for UNIX shell commands
@@ -49,6 +49,7 @@ Plug 'easics/vci_plugins'
 " Easics plugins
 Plug 'easics/class_templates'
 Plug 'easics/addmagic'
+Plug 'git@gitlab.e.easics.be:easics/pythonTemplates'
 
 " Common plugins (adapted for easics)
 Plug 'easics/filenavigation'
