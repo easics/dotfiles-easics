@@ -39,3 +39,5 @@ import systemc
 systemc.register_systemc()
 exec(open(os.path.expanduser('~/.gdb/python/ac_types/ac_pp.py')).read())
 end
+
+source .gdbinit.local
