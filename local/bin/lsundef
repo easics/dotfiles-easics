@@ -1,0 +1,7 @@
+#! /bin/sh -e
+
+so=libtestplan.so
+if [ ! -z "$1" ]; then
+  so="$1"
+fi
+ldd -r $so  | c++filt | egrep -v '\<(mti_|vpi_|acc_|tf_)' | grep '^undefined symbol'

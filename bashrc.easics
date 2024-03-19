@@ -56,6 +56,8 @@ alias nolib='LD_LIBRARY_PATH= ITCL_LIBRARY= PATH=/usr/bin:/bin:$PATH '
 alias nvim=~/nvim.appimage
 alias nvim-qt="nvim-qt --nvim=$HOME/nvim.appimage"
 
+alias q=qalc
+
 md() {
   mkdir $1
   cd $1
@@ -147,8 +149,8 @@ fi
 
 if [ -z "$SSH_CLIENT" ]; then
   export GPG_TTY="$(tty)"
-  export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
   gpgconf --launch gpg-agent
+  export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
 fi
 
 NPM_PACKAGES="$HOME/.npm-packages"
