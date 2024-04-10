@@ -21,6 +21,8 @@ alias vi=vim
 
 alias more=less
 
+alias chrome=google-chrome
+
 # Grep for specific filetypes
 alias grep='grep --color'
 alias vgrep=$'fdfind \'.*\.(vhd|v|vhdl)$\' -0 | xargs -0 ag --silent '
@@ -112,6 +114,8 @@ export MINICOM="-c on"
 
 # Programmable completion tuning
 complete -A command where which
+# Otherwise .adoc files are not part of the tab completion
+complete -o default firefox chrome google-chrome
 
 # Helps with environment vars when doing cd etc.
 shopt -s cdable_vars
