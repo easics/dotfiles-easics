@@ -17,8 +17,14 @@
   ls = ls-files
   br = branch
   tree = log --graph --decorate --pretty=oneline --abbrev-commit --color=auto
-  ; Modified Not Generated
-  mng = !git ls -m | xargs grep -L 'EASICS generated file'
+  ; Modified Not Generated, with optional directory argument
+  mng = "!mngf() { \
+                   if [ ! -z "${1}" ]; then \
+                     cd $GIT_PREFIX; \
+                     cd $1; \
+                   fi; \
+                   git ls -m $1 | xargs grep -L 'EASICS generated file'; \
+                 }; mngf"
   logs = log --stat
   logss = log --stat --since=1.week
   unstage = reset HEAD --

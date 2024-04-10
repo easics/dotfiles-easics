@@ -74,8 +74,6 @@ export LS_COLORS="no=00:fi=00:di=00;36:ln=04;33:pi=40;33:so=01;35:bd=40;33;01:cd
 export EDITOR=vim
 export HISTSIZE=50000
 export HISTCONTROL=erasedups
-export XFONT='-lfp-bright-medium-r-normal--9-90-75-75--60-iso8859-1'
-export XFONT='-schumacher-clean-medium-r-normal--14-140-75-75-c-80-iso646.1991-irv'
 smiley() {
   retval=$?
   if [ "$retval" = "0" ]; then
@@ -84,26 +82,13 @@ smiley() {
     echo ":( ($retval)"
   fi
 }
-# set xterm title
-case ${TERM} in
-  [aEkx]term*|rxvt*|gnome*|konsole*|interix|tmux*)
-    PS1='\[\033]0;\u@\h:\w\007\]'
-    ;;
-  screen*)
-    PS1='\[\033k\u@\h:\w\033\\\]'
-    ;;
-  *)
-    unset PS1
-    ;;
-esac
 Green="\033[0;32m"
 Blue="\033[1;34m"
 Normal="\033[0m"
 export PS1="\[$Blue\]\u@\h \[$Green\]\W \$(smiley) \[$Normal\]> "
-export OS_TYPE=`uname -s`
-export MACHINE_TYPE=`uname -m`
 export PATH="$HOME/bin:$PATH"
 type -p PathEditor 2>&1 > /dev/null && export PATH=`PathEditor -clean PATH`
+export PRINTER=HP_Color_LaserJet_M555_scribe
 
 # 2x ctrl D to exit
 export IGNOREEOF=1
