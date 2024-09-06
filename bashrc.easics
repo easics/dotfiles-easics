@@ -1,8 +1,8 @@
 
 # For setups
-export PATH="/home/toels/easics/noversion/bin:$PATH"
+export PATH="/home_leuven/tools/easics/noversion/bin:$PATH"
 
-alias setup='source ~toels/easics/setup_bash/setup_script.bashrc'
+alias setup='source /home_leuven/tools/easics/setup_bash/setup_script.bashrc'
 alias msetup='setup modelsim'
 alias ssetup='setup synopsys'
 alias psetup='setup project'

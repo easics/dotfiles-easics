@@ -1,7 +1,7 @@
 # Setup fzf
 # ---------
-if [[ ! "$PATH" == */home/$USER/.fzf/bin* ]]; then
-  export PATH="/home/$USER/.fzf/bin:${PATH:+${PATH}:}"
+if [[ ! "$PATH" == *$HOME/.fzf/bin* ]]; then
+  export PATH="$HOME/.fzf/bin:${PATH:+${PATH}:}"
 fi
 
 # Auto-completion
@@ -28,8 +28,9 @@ _fzf_compgen_dir() {
     -a -not -path "$dir" -print 2> /dev/null | sed 's@^\./@@'
 }
 
-[[ $- == *i* ]] && source "/home/$USER/.fzf/shell/completion.bash" 2> /dev/null
+#[[ $- == *i* ]] && source "$HOME/.fzf/shell/completion.bash" 2> /dev/null
 
 # Key bindings
 # ------------
-source "/home/$USER/.fzf/shell/key-bindings.bash"
+eval "$(fzf --bash)"
+
