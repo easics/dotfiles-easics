@@ -65,6 +65,12 @@ md() {
   cd $1
 }
 
+show_setup() {
+  for f in /home_leuven/tools/easics/setup_bash/*.bashrc; do
+    basename $f .bashrc
+  done
+}
+
 # Print in terminal from selection
 alias psel='pwd | xsel -i'
 alias csel='cd $(xsel -o)'
