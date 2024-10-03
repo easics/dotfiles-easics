@@ -153,10 +153,6 @@ elif [ -x ~/.gem/ruby/2.7.0/bin ]; then
   export PATH=~/.gem/ruby/2.7.0/bin:$PATH
 fi
 
-if [ -x ~/.fzf/bin ]; then
-  export PATH="/home/$USER/.fzf/bin:${PATH:+${PATH}:}"
-fi
-
 if [ -z "$SSH_CLIENT" ]; then
   export GPG_TTY="$(tty)"
   gpgconf --launch gpg-agent
@@ -164,8 +160,6 @@ if [ -z "$SSH_CLIENT" ]; then
   echo UPDATESTARTUPTTY | gpg-connect-agent > /dev/null
 fi
 
-NPM_PACKAGES="$HOME/.npm-packages"
-PATH="$NPM_PACKAGES/bin:$PATH"
 #MANPATH="$NPM_PACKAGES/share/man:$(manpath)"
 NODE_PATH="$NPM_PACKAGES/lib/node_modules:$NODE_PATH"
 
