@@ -55,9 +55,6 @@ alias gitg='LD_LIBRARY_PATH= gitg'
 alias qgit='LD_LIBRARY_PATH= qgit'
 alias nolib='LD_LIBRARY_PATH= ITCL_LIBRARY= PATH=/usr/bin:/bin:$PATH '
 
-alias nvim=~/nvim.appimage
-alias nvim-qt="nvim-qt --nvim=$HOME/nvim.appimage"
-
 alias q=qalc
 
 md() {
@@ -91,7 +88,7 @@ smiley() {
 Green="\033[0;32m"
 Blue="\033[1;34m"
 Normal="\033[0m"
-export PS1="\[$Blue\]\u@\h \[$Green\]\W \$(smiley) \[$Normal\]> "
+export PS1="\[$Blue\]\u\h \[$Green\]\W \$(smiley) \[$Normal\]> "
 export PATH="$HOME/bin:$PATH"
 type -p PathEditor 2>&1 > /dev/null && export PATH=`PathEditor -clean PATH`
 export PRINTER=HP_Color_LaserJet_M555_scribe
