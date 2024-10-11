@@ -154,7 +154,7 @@ elif [ -x ~/.gem/ruby/2.7.0/bin ]; then
 fi
 
 if [ -x ~/.fzf/bin ]; then
-  export PATH="/home/$USER/.fzf/bin:${PATH:+${PATH}:}"
+  export PATH="$HOME/.fzf/bin:$PATH"
 fi
 
 if [ -z "$SSH_CLIENT" ]; then
