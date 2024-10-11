@@ -49,7 +49,8 @@ bindsym XF86AudioMicMute exec --no-startup-id wpctl set-mute @DEFAULT_AUDIO_SOUR
 floating_modifier $mod
 
 # start a terminal
-bindsym $mod+Return exec flatpak run org.wezfurlong.wezterm
+bindsym $mod+Return exec wezterm
+#bindsym $mod+Return exec flatpak run org.wezfurlong.wezterm start -- /bin/bash
 #bindsym $mod+Return exec gnome-terminal
 #bindsym $mod+Return exec tabbed -c alacritty --embed
 
