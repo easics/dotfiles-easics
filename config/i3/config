@@ -130,14 +130,14 @@ set $ws9 "9"
 set $ws10 "10"
 
 # bind workspaces to monitors
-workspace $ws1 output DP-0
-workspace $ws2 output DP-0
-workspace $ws3 output DP-0
-workspace $ws4 output DP-0
-workspace $ws7 output HDMI-0
-workspace $ws8 output HDMI-0
-workspace $ws9 output HDMI-0
-workspace $ws10 output HDMI-0
+workspace $ws1 output DP-1-1-2
+workspace $ws2 output DP-1-1-2
+workspace $ws3 output DP-1-1-2
+workspace $ws4 output DP-1-1-2
+workspace $ws7 output DP-1-1-1
+workspace $ws8 output DP-1-1-1
+workspace $ws9 output DP-1-1-1
+workspace $ws10 output DP-1-1-1
 
 # switch to workspace
 bindsym $mod+1 workspace $ws1
@@ -202,7 +202,8 @@ mode "resize" {
         bindsym $mod+r mode "default"
 }
 
-bindsym $mod+r mode "resize"
+#bindsym $mod+r mode "resize"
+bindsym $mod+r exec "autorandr --cycle --force"
 
 bindsym $mod+minus scratchpad show
 bindsym $mod+Shift+minus move scratchpad
@@ -211,7 +212,7 @@ bindsym $mod+Shift+minus move scratchpad
 # finds out, if available)
 bar {
   status_command i3status
-  tray_output HDMI-0
+  tray_output DP-1-1-2
 }
 
 # Lock screen
