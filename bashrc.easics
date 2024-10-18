@@ -55,9 +55,6 @@ alias gitg='LD_LIBRARY_PATH= gitg'
 alias qgit='LD_LIBRARY_PATH= qgit'
 alias nolib='LD_LIBRARY_PATH= ITCL_LIBRARY= PATH=/usr/bin:/bin:$PATH '
 
-alias nvim=~/nvim.appimage
-alias nvim-qt="nvim-qt --nvim=$HOME/nvim.appimage"
-
 alias q=qalc
 
 md() {
@@ -91,7 +88,7 @@ smiley() {
 Green="\033[0;32m"
 Blue="\033[1;34m"
 Normal="\033[0m"
-export PS1="\[$Blue\]\u@\h \[$Green\]\W \$(smiley) \[$Normal\]> "
+export PS1="\[$Blue\]\u\h \[$Green\]\W \$(smiley) \[$Normal\]> "
 export PATH="$HOME/bin:$PATH"
 type -p PathEditor 2>&1 > /dev/null && export PATH=`PathEditor -clean PATH`
 export PRINTER=HP_Color_LaserJet_M555_scribe
@@ -153,10 +150,6 @@ elif [ -x ~/.gem/ruby/2.7.0/bin ]; then
   export PATH=~/.gem/ruby/2.7.0/bin:$PATH
 fi
 
-if [ -x ~/.fzf/bin ]; then
-  export PATH="$HOME/.fzf/bin:$PATH"
-fi
-
 if [ -z "$SSH_CLIENT" ]; then
   export GPG_TTY="$(tty)"
   gpgconf --launch gpg-agent
@@ -164,8 +157,6 @@ if [ -z "$SSH_CLIENT" ]; then
   echo UPDATESTARTUPTTY | gpg-connect-agent > /dev/null
 fi
 
-NPM_PACKAGES="$HOME/.npm-packages"
-PATH="$NPM_PACKAGES/bin:$PATH"
 #MANPATH="$NPM_PACKAGES/share/man:$(manpath)"
 NODE_PATH="$NPM_PACKAGES/lib/node_modules:$NODE_PATH"
 
@@ -173,4 +164,4 @@ if [ -f ~/.bashrc.local ]; then
   source ~/.bashrc.local
 fi
 
-umask 0027
+umask 0022
