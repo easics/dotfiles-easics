@@ -219,7 +219,7 @@ bindsym $mod+Shift+minus move scratchpad
 #   #tray_output DP-1-1-2
 #   #tray_output eDP-1-1
 # }
-exec_always --no-startup-id polybar
+exec_always --no-startup-id polybar-msg cmd quit; polybar
 
 # Lock screen
 bindsym $mod+Ctrl+l exec loginctl lock-session
