@@ -47,6 +47,7 @@ end
 config.keys = {
   bind_if(is_outside_vim, "h", "CTRL", a.ActivatePaneDirection("Left")),
   bind_if(is_outside_vim, "l", "CTRL", a.ActivatePaneDirection("Right")),
+  { key = 'r', mods = 'CTRL|SHIFT', action = a.RotatePanes 'Clockwise' },
 }
 
 return config
