@@ -136,6 +136,10 @@ if [ -x ~/.local/bin ]; then
   export PATH=~/.local/bin:$PATH
 fi
 
+if [ -x ~/bin ]; then
+  export PATH=~/bin:$PATH
+fi
+
 if [ -x ~/.cargo/bin ]; then
   export PATH=~/.cargo/bin:$PATH
 fi
