@@ -150,12 +150,16 @@ elif [ -x ~/.gem/ruby/2.7.0/bin ]; then
   export PATH=~/.gem/ruby/2.7.0/bin:$PATH
 fi
 
-if [ -z "$SSH_CLIENT" ]; then
+startagent() {
   export GPG_TTY="$(tty)"
   gpgconf --launch gpg-agent
   export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
-  echo UPDATESTARTUPTTY | gpg-connect-agent > /dev/null
-fi
+  echo -e "RELOADAGENT\nUPDATESTARTUPTTY\nBYE" | gpg-connect-agent > /dev/null
+}
+
+source ~/.local/share/bash/ssh-find-agent.sh
+
+ssh-add -l >& /dev/null || ssh-find-agent -a || startagent
 
 #MANPATH="$NPM_PACKAGES/share/man:$(manpath)"
 NODE_PATH="$NPM_PACKAGES/lib/node_modules:$NODE_PATH"
