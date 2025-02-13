@@ -1,9 +1,3 @@
-alias r3 "reggie -b; restart -f; run -a"
-alias r2 "restart -f; run -a"
-alias r1 "run -a"
-alias r2c {set to [getactivecursortime]; restart -f; run $to}
-alias r3c {set to [getactivecursortime]; reggie -b; restart -f; run $to}
-alias rs "restart -f"
 alias ts "tail simulation.log"
 alias cs "cat simulation.log"
 alias vnw "view -new wave"
@@ -50,3 +44,25 @@ proc sw {} {
 proc cw {} {
   foreach n [lsearch -all -inline [view] "*.wave*"] { noview $n }
 }
+
+# Restart vsim
+# Standard restart -f does not work in a pytest context
+# This does the following:
+#    Save all waves to allwaves.do
+#    Restart
+#    do allwaves.do
+proc restart_vsim {argv} {
+  sw
+  .main clear
+  regsub {\-\-} $argv vsim cmd
+  quit -sim
+  eval $cmd
+  daw
+}
+
+alias r3 "reggie -b; restart_vsim {$argv}; run -a"
+alias r2 "restart_vsim {$argv}; run -a"
+alias r1 "run -a"
+#alias r2c {set to [getactivecursortime]; restart_vsim {$argv}; run $to}
+#alias r3c {set to [getactivecursortime]; reggie -b; restart_vsim {$argv}; run $to}
+alias rs "restart_vsim {$argv}"
