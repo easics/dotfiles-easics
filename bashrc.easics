@@ -1,4 +1,3 @@
-
 # For setups
 export PATH="/asic_leu/easics/noversion/bin:$PATH"
 
@@ -6,6 +5,9 @@ alias setup='source /asic_leu/easics/setup_bash/setup_script.bashrc'
 alias msetup='setup modelsim'
 alias ssetup='setup synopsys'
 alias psetup='setup project'
+
+# Let dpsh source your ~/.bashrc
+export DPSH_USE_BASHRC=1
 
 # Common
 alias which='type -p'
@@ -129,8 +131,14 @@ export LC_ALL=en_US.UTF-8
 # For Xilinx 13.3 13.4
 unset QT_PLUGIN_PATH
 
-# For fuzzy find
-export FZF_COMPLETION_TRIGGER="--"
+# Setup fuzzy find
+if command -v fzf > /dev/null 2>&1; then
+  export FZF_COMPLETION_TRIGGER="--"
+  eval "$(fzf --bash)"
+  if [[ ! "$PATH" == *$HOME/.fzf/bin* ]]; then
+    export PATH="$HOME/.fzf/bin:$PATH"
+  fi
+fi
 
 if [ -x ~/.local/bin ]; then
   export PATH=~/.local/bin:$PATH

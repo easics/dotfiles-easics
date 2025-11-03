@@ -117,5 +117,3 @@ if ! shopt -oq posix; then
 fi
 
 source ~/.bashrc.easics
-
-[ -f ~/.fzf.bash ] && source ~/.fzf.bash
